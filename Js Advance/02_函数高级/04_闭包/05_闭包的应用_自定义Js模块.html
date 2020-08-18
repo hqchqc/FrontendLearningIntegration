@@ -1,0 +1,28 @@
+<!-- /**
+ * 闭包的应用2：定义JS模块
+ *      - 具有特定功能的JS文件
+ *      - 将所有的数据和功能都封装在一个函数对象内部(私有的)
+ *      - 只向外暴露一个包含n个方法的对象或函数
+ *      - 模块的使用者 只需要通过模块暴露的对象调用方法来实现对应的功能
+ */ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='./05_myModule1.js'></script>
+    <script src="./05_myModule2.js"></script>
+    <script>
+        // 第一种
+        // var obj = fn()
+        // obj.doOtherthing()
+        // obj.doSomething()
+        // 第二种
+        // myModule2.doSomething()
+        // myModule2.doOtherthing()
+    </script>
+</body>
+</html>
