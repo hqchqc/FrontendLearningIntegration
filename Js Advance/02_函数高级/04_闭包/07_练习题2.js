@@ -6,7 +6,7 @@ function fun(n,o){
         }
     }
 }
-var a = fun(0); // undefined  
+var a = fun(0); // undefined   
 a.fun(1)    // 0    
 a.fun(2)    // 0
 a.fun(3)    // 0

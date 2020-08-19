@@ -27,7 +27,7 @@
           // 向上一层找 也就是全局作用域中 也找不到
           console.log(fn2);
           // this 指向obj对象 就能找到了
-          console.log(this.fn2);
+        //   console.log(this.fn2);
       }
   }
   obj.fn2()
