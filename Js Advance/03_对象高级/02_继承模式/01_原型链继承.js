@@ -21,8 +21,6 @@
  Supper.prototype.showSupperProp = function(){
      console.log(this.supProp);
  }
-
-
  
  // 子类型
  function Sub(){
