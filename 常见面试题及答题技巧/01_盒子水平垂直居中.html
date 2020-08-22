@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background-color: blueviolet;
+        }
+        /*            基于定位             */
+        /* 定位 1  知道具体宽高*/
+        /* .container{
+            width: 100px;
+            height: 50px;
+            background-color: antiquewhite;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -50px;
+        } */
+
+        /* 定位 2  过渡方案 也是必须知道宽高 但是不需要考虑宽高多少*/
+        /* .container{
+            width: 100px;
+            height: 50px;
+            background-color: antiquewhite;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        } */
+
+        /* 定位 3 不需要知道宽高  不兼容*/
+        /* .container{
+            background-color: antiquewhite;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%)
+        } */
+
+        /* 定位 4  */
+        /* .box{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        } */
+
+        /* 定位 5 js 的方式*/
+        /* .container{
+            height: 100px;
+            width: 100px;
+        } */
+
+        /* 定位 6 少见的  必须要用固定宽高 本身适用于文本的*/
+        /* .box{
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .container{
+            display: inline-block;
+        } */
+    </style>
+</head>
+<body>
+    <div class="box" id="box">
+        <div class="container" id="container">我是内容</div>
+    </div>
+
+    <script>
+        /* 定位 5 通过 JavaScript */
+        /*
+        let HTML = document.documentElement,
+            widthW = box.offsetWidth,
+            widthH = box.offsetHeight,
+            containerW = container.offsetWidth,
+            containerH = container.offsetHeight;
+
+        container.style.position = "absolute";
+        container.style.left = (widthW - containerW) / 2 + 'px';
+        container.style.top = (widthH - containerH) / 2 + 'px'; 
+        */
+    </script>
+</body>
+</html>
