@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>两栏布局——利用定位</title>
+    <style>
+        /* 利用左边元素的定位 */
+        /* .box{
+            height: 100px;
+
+            position: relative;
+        }
+        .left{
+            width: 100px;
+            height: 100px;
+            background-color: gold;
+
+            position: absolute;
+        }
+        .right{
+            height: 100px;
+            background-color: hotpink;
+
+            margin-left: 100px;
+        } */
+
+        /* 利用右边元素的定位 */
+        .box{
+            height: 100px;
+
+            position: relative;
+        }
+        .left{
+            width: 100px;
+            height: 100px;
+            background-color: gold;
+        }
+        .right{
+            height: 100px;
+            background-color: hotpink;
+
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+</body>
+</html>

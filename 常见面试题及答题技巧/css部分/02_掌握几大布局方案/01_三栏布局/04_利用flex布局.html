@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三栏布局——利用flex</title>
+    <style>
+        .box{
+            height: 100px;
+
+            display: flex;
+        }
+        .left{
+            background-color: darkturquoise;
+
+            flex-wrap: 0;
+            flex-grow: 0;
+            flex-basis: 100px;
+        }
+        .right{
+            background-color: deeppink;
+
+            flex: 0 0 200px;
+        }
+        .center{
+            background-color: gold;
+            
+            flex: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="left"></div>
+        <div class="center"></div>
+        <div class="right"></div>
+    </div>
+</body>
+</html>
