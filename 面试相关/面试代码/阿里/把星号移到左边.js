@@ -19,3 +19,6 @@ function remove(arr) {
 
 let arr = [4,3,'*',4,'*',46,'*']
 console.log(remove(arr))
+console.log(Number.isNaN(1));
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(~9);
