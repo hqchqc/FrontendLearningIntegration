@@ -16,7 +16,7 @@
  */
 // 父类型
  function Supper(){
-     this.supProp = 'Supper property',
+     this.supProp = 'Supper property'
  }
  Supper.prototype.showSupperProp = function(){
      console.log(this.supProp);
@@ -34,4 +34,3 @@
 Sub.prototype = new Supper()
 // 让子类型的原型的constructor指向子类型
 Sub.prototype.constructor = Sub
-

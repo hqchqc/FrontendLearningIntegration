@@ -13,5 +13,5 @@
  }
 
  var p1 = new Person('xxx',12)
- var p2 = new Person('xsxx',122)
+ var p2 = new Person('xxxx',122)
  console.log(p1,p2);

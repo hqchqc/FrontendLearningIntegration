@@ -23,7 +23,7 @@
  }
 
 //  Student.prototype = content(Person.prototype)
-Student.prototype = Object.create(Person.prototype)
+ Student.prototype = Object.create(Person.prototype)
  Student.prototype.constructor = Student;
 
  Student.prototype.sayMyGrade = function(){
