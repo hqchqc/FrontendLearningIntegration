@@ -43,3 +43,19 @@
     A(1);   // 1
     A(2);   // 4
 }
+
+// AMD 和 CMD 的区别
+define([
+    './a',
+    './b'
+], function(require, factory) {
+    'use strict';
+    require.dosomething()
+});
+
+define (function(require,exports,module){
+    var a = require('./a')
+    a.dosomething()
+    var b = require('./b')
+    b.dosomething()
+})
