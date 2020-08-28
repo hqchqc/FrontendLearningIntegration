@@ -33,4 +33,4 @@
  // 子类型的原型为父类型的一个实例对象
 Sub.prototype = new Supper()
 // 让子类型的原型的constructor指向子类型
-console.log(Sub.prototype.constructor);
+Sub.prototype.constructor = Sub
