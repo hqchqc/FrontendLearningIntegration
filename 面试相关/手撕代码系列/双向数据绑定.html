@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <input placeholder="请输入" type="text" id="input" onkeyup="change(event)" />
+    <p id="t"></p>
+    <script>
+        const datas = {
+            value: ''
+        }
+
+        function change(event) {
+            datas.value = event.target.value
+
+            document.getElementById("t").innerText = datas.value
+        } -->
+    </script>
+    <script>
+        // 发布者
+        function Subject() {
+            // 单个发布者的所有订阅者
+            this.observers = [];
+
+            // 添加一个订阅者
+            this.attach = function (callback) {
+                this.observers.push(callback)
+            }
+
+            // 通知所有的订阅者
+            this.notify = function (value) {
+                this.observers.forEach(callback => {
+                    callback(value)
+                })
+            }
+        }
+
+        // 订阅者
+        function Observer(queue, key, callback) {
+            queue[key].attach(callback)
+        }
+
+        // 手动更新数据
+        // function setData(data,key,value){
+        //     data[key] = value;
+
+        //     // 通知此值的所有订阅者 数据发生了更新
+        //     messageQueue[key].notify(value);
+        // }
+        function Watcher(data, queue) {
+            for (let key in data) {
+                let value = data[key];
+                Object.defineProperty(data, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get: () => value,
+                    set: newValue => {
+                        value = newValue;
+
+                        queue[key].notify(value)
+                    }
+                })
+            }
+            return data;
+        }
+
+        // 消息队列
+        const messageQueue = {};
+
+        // 数据
+        // const myData = {
+        //     value: ''
+        // };
+        const myData = Watcher({
+            value: ''
+        }, messageQueue);
+
+        // 将每个数据属性添加可订阅的入口
+        for (let key in myData) {
+            messageQueue[key] = new Subject();
+        }
+
+        // 订阅 value 值的变化
+        Observer(messageQueue, "value", value => {
+            console.log("object", value);
+        })
+
+        // 更新数据
+        // setData(myData, "value", "hello world")
+        // setData(myData, "value", "hello")
+
+        myData.value = "yyy"
+    </script>
+</body>
+
+</html>

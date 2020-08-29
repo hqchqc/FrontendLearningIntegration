@@ -6,4 +6,3 @@
 function format(number){
     return number && number.replace(/(?!^)(?=(\d{3})+\.)/g,',');
 }
-console.log(format('1200000011.00000'))
