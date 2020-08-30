@@ -52,21 +52,33 @@
         //     // 通知此值的所有订阅者 数据发生了更新
         //     messageQueue[key].notify(value);
         // }
-        function Watcher(data, queue) {
-            for (let key in data) {
-                let value = data[key];
-                Object.defineProperty(data, key, {
-                    enumerable: true,
-                    configurable: true,
-                    get: () => value,
-                    set: newValue => {
-                        value = newValue;
 
-                        queue[key].notify(value)
-                    }
-                })
-            }
-            return data;
+        // function Watcher(data, queue) {
+        //     for (let key in data) {
+        //         let value = data[key];
+        //         Object.defineProperty(data, key, {
+        //             enumerable: true,
+        //             configurable: true,
+        //             get: () => value,
+        //             set: newValue => {
+        //                 value = newValue;
+
+        //                 queue[key].notify(value)
+        //             }
+        //         })
+        //     }
+        //     return data;
+        // }
+
+        function ProxyWatcher(data,queue){
+            return new Proxy(target,{
+                get: (target,key) => target[key],
+                set: (target,key,value) => {
+                    target[key] = value;
+
+                    queue[key].notify(value)
+                }
+            })
         }
 
         // 消息队列
@@ -76,9 +88,14 @@
         // const myData = {
         //     value: ''
         // };
-        const myData = Watcher({
-            value: ''
-        }, messageQueue);
+
+        // const myData = Watcher({
+        //     value: ''
+        // }, messageQueue);
+
+        const data = ProxyWatcher({
+            value: ""
+        },messageQueue)
 
         // 将每个数据属性添加可订阅的入口
         for (let key in myData) {
