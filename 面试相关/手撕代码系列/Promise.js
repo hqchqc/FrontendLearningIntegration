@@ -104,3 +104,68 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
         onRejected(this.value);
     }
 };
+
+Promise.all = function (promises) {
+    return new Promise((resolve, reject) => {
+        let result = [];
+        let len = promises.length;
+        if (len === 0) {
+            resolve(result)
+            return;
+        }
+        const handleDate = (data, index) => {
+            result[index] = data;
+            if (index === len - 1) {
+                resolve(result);
+            }
+        }
+        for (let i = 0; i < len; i++) {
+            // 为什么不直接 promise[i].then, 因为promise[i]可能不是一个promise
+            Promise.resolve(promises[i].then(data => {
+                handleDate(data, i);
+            })).catch(err => {
+                reject(err)
+            })
+        }
+    })
+}
+
+Promise.all = function (promises) {
+    return new Promise((resolve, reject) => {
+        let len = promises.length,
+            result = [];
+        if (len === 0) {
+            resolve(result);
+            return;
+        }
+        const handleDate = function (data, index) {
+            result[index] = data;
+            if (len - 1 === index) {
+                resolve(result)
+            }
+        }
+        for (let i = 0; i < len; i++) {
+            Promise.resolve(promises[i]).then(res=>{
+                handleDate(res,i)
+            }).catch(err=>{
+                reject(err)
+            })
+        }
+    })
+}
+
+Promise.race = function(promises){
+    return new Promise((resolve,reject)=>{
+        let len = promises.length;
+        if(len === 0) return
+        for(let i=0; i<len; i++){
+            Promise.resolve(promises[i]).then(res=>{
+                resolve(res);
+                return;
+            }).catch(err=>{
+                reject(err);
+                return;
+            })
+        }
+    })
+}
