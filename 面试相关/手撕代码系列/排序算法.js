@@ -172,4 +172,5 @@ let arr = [10, 2, 4, 356, 15, 3, 45];
 // shellSort(arr)
 // console.log(mergeSort(arr));
 quickSort(arr)
+
 console.log(arr);
