@@ -174,3 +174,43 @@ let arr = [10, 2, 4, 356, 15, 3, 45];
 quickSort(arr)
 
 console.log(arr);
+
+// 冒泡排序 是稳定排序 时间复杂度 n² 空间复杂度 1
+function bubbleSort(arr){
+    if(arr.length <= 1 || !Array.isArray(arr)){
+        return arr
+    }
+
+    for(let j=arr.length - 1; j >= 0; j--){
+        for(let i=0; i<j; i++){
+            if(arr[i] > arr[i+1]){
+                [arr[i],arr[i+1]] = [arr[i+1],arr[i]];
+            }
+        }
+    }    
+    return arr
+}
+
+function betterBubbleSort()
+
+// 选择排序 不是稳定排序 时间复杂度n² 空间复杂度 1
+function selectSort(arr){
+    if(!Array.isArray(arr) || arr.length <= 1) return;
+
+    for(let j = 0; j < arr.length; j++){
+        let minIndex = j;
+        for(let i = minIndex + 1; i < arr.length; i++){
+            if(arr[minIndex] > arr[i]){
+                minIndex = i
+            }
+        }
+        [arr[minIndex],arr[j]] = [arr[j],arr[minIndex]];
+    }
+    return arr
+}
+
+// 插入排序 
+
+let arr1 = [12,32,12,323,2,1,4]
+console.log(bubbleSort(arr1));
+console.log(selectSort(arr1));
