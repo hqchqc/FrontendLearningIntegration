@@ -17,3 +17,27 @@
      }
      return false
  }
+
+ // 解法二
+ function Find(target, array)
+{
+    // 以右上角为起点
+    let row = array.length - 1, 
+        column = array[0].length, 
+        hang = 0,   
+        lie = column - 1; 
+    while( hang <= row && lie >= 0 ){
+        if(array[hang][lie] === target){
+            return true
+        }
+        if( array[hang][lie] > target ){
+            lie--
+        }else if( array[hang][lie] <  target ){
+            hang++
+        }
+    }
+    
+    return false
+}
+console.log(Find(7,[[1,2,8,9],[2,4,9,12],[4,7,10,13],[6,8,11,15]]))
+
