@@ -1,67 +1,43 @@
-let xml = new XMLHttpRequest();
-xml.open('get','localhost:8080',true);
-xml.onreadystatechange = function(){
-    if(this.readyState !== 4) return
-    if(this.status === 200){
-        handle(this.response);
+let str = '1,2,3';
+str = str.split(',');
+
+let memo = {},number = 1;
+for(let i=0; i<str.length; i++){
+    if(!memo[str[i]]){
+        memo[str[i]] = {};
+        memo[str[i]].number = number;
+        memo[str[i]].index = [];
+        memo[str[i]].index.push(i);
     }else{
-        console.log(this.statusText);
+        memo[str[i]].number++;
+        memo[str[i]].index.push(i)
     }
 }
-xml.onerror = function(){
-    console.log(this.statusText);
-}
-xml.setRequestHeader('Accept','application/json')
-xml.send(null)
-
-function getJSON(url){
-    let promise = new Promise((res,rej)=>{
-        let xhr = new XMLHttpRequest();
-        xhr.open('get',URL,true)
-        xhr.onreadystatechange = function(){
-            if(this.readyState !== 4) return;
-            if(this.status === 200){
-                res(this.response)
-            }else{
-                rej(this.statusText);
-            }
-        };
-        xhr.onerror = function(){
-            rej(this.statusText);
-        }
-        xhr.responseType = 'json';
-        xhr.setRequestHeader("Accept",'application/json');
-        xhr.send()
-    })
-    return promise
-}
-
-function shallowCopy(object){
-    if(!object || typeof object !== 'object') return;
-
-    let newObject = Array.isArray(object) ? [] : {};
-
-    for(let key in object){
-        if(object.hasOwnProperty(key)){
-            newObject[key] = object[key];
-        }
+let max = 0,result = {}
+for(let key in memo){
+    if(memo[key].number > max){
+        max = memo[key].number;
     }
-
-    return newObject;
 }
-
-function deepCopy(object){
-    if(!object || typeof object !== 'object') return;
-
-    let newObject = Array.isArray(object) ? [] : {};
-
-    for(let key in object){
-        if(Object.hasOwnProperty(key)){
-            newObject[key] = 
-            typeof object[key] === 'object' ? 
-            deepCopy(object[key]) : object[key];
-        }
+for(let key in memo){
+    if(memo[key].number === max){
+        result[key] = memo[key];
     }
-
-    return newObject;
 }
+
+for(key in result){
+    for(let i=0; i<result[key].index.length; i++){
+        str[result[key].index[i]] = null;    
+    }
+}
+
+
+str = str.toString()
+let temp ='';
+for(let i=0; i<str.length; i++){
+    if(str[i] !== ','){
+        temp += str[i]
+    }
+}
+
+console.log(temp.split(''));

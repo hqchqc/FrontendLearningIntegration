@@ -3,20 +3,20 @@
     保证base和exponent不同时为0
  */
 
-function Power(base, exponent)
-{
-    if(exponent < 0){
+function Power(base, exponent) {
+    if (exponent < 0) {
         base = 1 / base;
         exponent = Math.abs(exponent);
     }
     let temp = base,
         ret = 1.0
-    while(exponent){
-        if(exponent % 2 !== 0){
+    while (exponent) {
+        if (exponent % 2 !== 0) {
             ret = ret * temp;
         }
         temp = temp * temp;
         exponent >>= 1;
+        // exponent = Math.floor(exponent / 2)
     }
     return ret;
 }
