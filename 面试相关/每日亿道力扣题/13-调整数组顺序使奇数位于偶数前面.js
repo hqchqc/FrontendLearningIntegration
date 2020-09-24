@@ -17,3 +17,4 @@ function reOrderArray(array)
     }
     return qi.concat(ou);
 }
+
