@@ -54,7 +54,7 @@ function insertSort(arr) {
     for (let i = 1; i < arr.length; i++) {
         let tmp = arr[i],
             k = i;
-        while (tmp < arr[k - 1] && k - 1 >= 0) {
+        while (tmp < arr[k - 1] && k - 1 >= 0) { // 这里是tmp不是arr[i]的原因是 后边修改arr[k]的值相当于在修改arr[i]
             arr[k] = arr[k - 1]
             k--;
         }
