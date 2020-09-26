@@ -4,20 +4,17 @@ Function.prototype.myCall = function(context){
     if(typeof this !== 'function'){
         console.error('type error')
     }
-
+    
     // 获取参数
     let args = [...arguments].slice(1),
         result = null;
     
     // 判断 context 是否传入 如果为传入则设置为 window        
     context = context || window;
-
     // 将调用函数设为对象的方法
     context.fn = this;
-
     // 调用函数
     result = context.fn(...args);
-
     // 将属性删除
     delete context.fn;
 
@@ -70,3 +67,14 @@ Function.prototype.myBind = function(context){
         )
     }
 }
+
+var r = {
+    name: 'xx'
+}
+
+function myName(){
+    console.log(this.name);
+}
+
+
+myName.myCall(r)

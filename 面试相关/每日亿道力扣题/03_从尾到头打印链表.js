@@ -13,6 +13,6 @@ var reverseList = function(head) {
        q.next = list;
        list = q;
    }
-
+   
     return list;
 };
