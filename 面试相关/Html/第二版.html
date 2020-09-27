@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Subject() {
+            this.observers = [];
+            this.attach = function (callback) {
+                this.observers.push(callback)
+            }
+            this.notify = function (value) {
+                this.observers.forEach(callback => {
+                    callback(value)
+                })
+            }
+        }
+
+        function Observer(queue, key, callback) {
+            queue[key].attach(callback)
+        }
+
+        // 使用 proxy 之前
+        // function Watcher(queue,data){
+        //     for(let key in data){
+        //         let value = data[key];
+        //         Object.defineProperty(data,key,{
+        //             get: ()=>{
+        //                 return value
+        //             },
+        //             set: newValue => {
+        //                 value = newValue;
+        //                 queue[key].notify(value);
+        //             }
+        //         })
+        //     }
+        //     return data;
+        // }
+        // 使用 proxy 之后
+        function ProxyWatcher(queue, data) {
+            return new Proxy(data, {
+                get: (target, key) => {
+                    return target[key]
+                },
+                set(target, key, value){
+                    target[key] = value;
+                    queue[key].notify(value);
+                }
+            })
+        }
+
+        const messageQueue = {};
+
+        // 使用 proxy 之前
+        // let data = Watcher(messageQueue,{
+        //     name: 'hqc',
+        //     age: 20,
+        //     fruits: ['apple','banana','app'],
+        //     obj: {
+        //         name: 'jy',
+        //         age: 21
+        //     }
+        // });
+
+        // 使用 proxy 之后
+        let data = ProxyWatcher(messageQueue, {
+            name: 'hqc',
+            age: 20,
+            fruits: ['apple', 'banana', 'app'],
+            obj: {
+                name: 'jy',
+                age: 21
+            }
+        })
+
+        for (let key in data) {
+            messageQueue[key] = new Subject();
+        }
+
+        Observer(messageQueue, "name", value => {
+            console.log('name update', value);
+        })
+        Observer(messageQueue, 'fruits', value => {
+            console.log('fruits update', value);
+        })
+        Observer(messageQueue, 'obj', value => {
+            console.log('obj update', value);
+        })
+        // console.log(messageQueue);
+        data.name = 'jyq'
+        data.fruits.push('aaa');
+        data.fruits[0] = 'app'
+        // data.obj.name = 'qq'
+
+        // console.log(data);
+        // console.log(data);
+    </script>
+</body>
+
+</html>

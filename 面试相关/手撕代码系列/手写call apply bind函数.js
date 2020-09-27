@@ -72,9 +72,9 @@ var r = {
     name: 'xx'
 }
 
-function myName(){
-    console.log(this.name);
+function myName(a){
+    console.log(this.name,a);
 }
 
 
-myName.myCall(r)
+myName.myBind()(r)
