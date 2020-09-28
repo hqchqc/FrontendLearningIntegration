@@ -105,6 +105,8 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
     }
 };
 
+// 两种情况 若参数中的状态都变为fulfilled p的状态才是fulfilled
+// 只要有一个状态为rejected 整体为rejected
 Promise.all = function (promises) {
     return new Promise((resolve, reject) => {
         let result = [];
@@ -121,33 +123,9 @@ Promise.all = function (promises) {
         }
         for (let i = 0; i < len; i++) {
             // 为什么不直接 promise[i].then, 因为promise[i]可能不是一个promise
-            Promise.resolve(promises[i].then(data => {
+            Promise.resolve(promises[i]).then(data => {
                 handleDate(data, i);
-            })).catch(err => {
-                reject(err)
-            })
-        }
-    })
-}
-
-Promise.all = function (promises) {
-    return new Promise((resolve, reject) => {
-        let len = promises.length,
-            result = [];
-        if (len === 0) {
-            resolve(result);
-            return;
-        }
-        const handleDate = function (data, index) {
-            result[index] = data;
-            if (len - 1 === index) {
-                resolve(result)
-            }
-        }
-        for (let i = 0; i < len; i++) {
-            Promise.resolve(promises[i]).then(res=>{
-                handleDate(res,i)
-            }).catch(err=>{
+            }).catch(err => {
                 reject(err)
             })
         }
@@ -169,3 +147,5 @@ Promise.race = function(promises){
         }
     })
 }
+
+// catch方法是then方法的别名
