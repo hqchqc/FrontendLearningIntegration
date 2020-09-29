@@ -165,3 +165,44 @@ myPromise.race = function (fn) {
         }
     })
 }
+
+myPromise.all = function(fn){
+    return new Promise((resolve,reject)=>{
+        let len = fn.length;
+        let result = [];
+        if(len === 0){
+            resolve(result);
+            return
+        }
+        function handle(data,index){
+            result[index] = data;
+            if(index === len-1){
+                resolve(result);
+            }
+        }
+        for(let i=0; i<len;i++){
+            Promise.resolve(fn[i]).then(data=>{
+                handle(data,i)
+            }).catch(err=>{
+                reject(err)
+            })
+        }
+    })
+}
+
+myPromise.race = function(fn){
+    return new Promise((resolve,reject)=>{
+        let len = fn.length;
+        if(len === 0){
+            return;
+        }
+        for(let i=0; i<fn.length; i++){
+            Promise.resolve(fn[i]).then(data=>{
+                resolve(data);
+                return
+            }).catch(err=>{
+                reject(err)
+            })
+        }
+    })
+}

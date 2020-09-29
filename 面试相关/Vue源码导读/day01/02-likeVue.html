@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <p>{{name}}</p>
+        <p>{{message}}</p>
+    </div>
+    <script>
+        // 步骤拆解
+        // 1. 拿到模板
+        // 2. 拿到数据
+        // 3. 将模板和数据结合 得到的是 html 元素(DOM元素)
+        // 4. 放到页面中
+
+        const reg = /\{\{(.+?)\}\}/g
+        // 1 拿到模板
+        let template = document.querySelector('#root');
+        // 2 拿到元素 这里我们模拟一下
+        let data = {
+            name: 'jyq',
+            message: 'missing you...'
+        }
+        // 3.将数据放到模板中(难点)
+        //      一般都是使用递归
+        //      在现在这个案例中 template 是 DOM 元素
+        //      在真正的 Vue 源码中是 DOM -> 字符串模板 -> vNode -> 真正的DOM
+        function compiler(template, data) {
+            // 获取模板元素下的子元素
+            let nodeList = template.childNodes;
+            // 遍历子元素 判断哪些是元素节点 哪些是文本节点
+            for (let i = 0; i < nodeList.length; i++) {
+                //  1: 代表元素节点
+                //  2: 代表文本节点
+                let type = nodeList[i].nodeType;    
+                // 若为元素节点 则继续递归 这里只考虑在元素节点下的情况 没考虑在标签中的情况
+                if (nodeList[i].nodeType === 1) {
+                    // 递归调用
+                    compiler(nodeList[i], data)
+                } else if (nodeList[i].nodeType === 3) {
+                    // 文本节点 判断里面是否有 {{}} 插值    
+                    let str = nodeList[i].nodeValue; // nodeValue 属性旨在文本节点中有效
+                    // 利用正则判读有没有 {{}} 有的话就进行替换 
+                    // replace 函数在正则匹配成功一次就调用一次
+                    // 后面的函数中 第一个参数代表匹配到的内容
+                    //              之后的参数代表正则中的 第 n 组我们在正则中用()分组
+                    str = str.replace(reg, (_, g) => {
+                        let key = g.trim();
+                        // 将 data 中的值 取出给变量
+                        let value = data[key];
+                        // 将变量返回出去 如果不返回 会是 undefined
+                        // 返回的value相当于拿到匹配到的对应的数据返回出去 为下一步填充数据做准备
+                        return value
+                    });
+                    // 注意： str现在和 DOM 元素是没有关系的
+                    // 这里做的就是将 str 对 DOM 上的元素进行填充
+                    nodeList[i].nodeValue = str;
+                }
+            }
+        }
+
+        // 仅仅做完上面还不够 你会发现如果我们此时调用compiler的话 相当于是把原来埋下的坑给补上
+        // 但是不要忘了 vue 是响应式的 如果你之后再去修改 data 中的数据那么原来的坑已经没有了 更何谈补呢
+        // 所以这里将template进行了一份拷贝
+        // cloneNode参数如果为 true 的话他将递归赋值当前节点的所有子孙节点 否则只复制当前节点
+        // 此时如果在调用compiler前后打印template的值会发现两个都是可以在页面上进行选择的
+        // 这说明 我们此时是没有生成新的 template 所以这里看到的 是直接在页面中就更新的数据 
+        // 因为 DOM 是引用类型
+        let generateNode = template.cloneNode(true);
+        console.log(template);
+        // 调用 compiler 函数进行编译 将数据与模板进行绑定
+        compiler(generateNode, data);
+        console.log(generateNode);
+        // 4 放到页面中
+        // 将拷贝后的内容放到页面中 注意这里的两个方法 平时自己没怎么使用
+        root.parentNode.replaceChild(generateNode, root);
+
+        // 以上的思路有很大的问题
+        // 1. Vue 使用的是 虚拟DOM
+        // 2. 只考虑了 单属性 ({{name}}) 而  Vue 中大量的使用层级 ({{ child.name.firstName }})
+        // 3. 代码没有整合
+    </script>
+</body>
+
+</html>

@@ -1,27 +1,26 @@
-var MinStack = function() {
+var MinStack = function () {
     this.result = [];
     this.minResult = [];
 };
 
-function push(node)
-{
+function push(node) {
     this.result.push(node);
-    if(node < this.minResult[this.minResult.length - 1]){
+    if (node < this.minResult[this.minResult.length - 1]) {
         this.minResult.push(node)
-    }else{
-        this.minResult.push(this.minResult[this.minResult.length-1])
+    } else {
+        this.minResult.push(this.minResult[this.minResult.length - 1])
     }
 }
-function pop()
-{
+
+function pop() {
     this.result.pop();
     this.minResult.pop();
 }
-function top()
-{
+
+function top() {
     return this.result.shift();
 }
-function min()
-{
+
+function min() {
     return this.minResult.top();
 }
