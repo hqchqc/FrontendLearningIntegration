@@ -32,14 +32,5 @@ var validateStackSequences = function(pushed, popped) {
             }
         }
     }
-    // 这是错的 牛客的测试用例不够多
-    // 此时代表已经遍历完入栈元素
-    // for(let i = stack.length - 1; i >= 0; i-- ){
-    //     if(stack[i] === popped[j]){
-    //         j++;
-    //     }else{
-    //         return false;
-    //     }
-    // }
     return stack.length === 0 ? true : false;
 };

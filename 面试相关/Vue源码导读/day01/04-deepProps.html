@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <p>{{name}}</p>
+            <p>{{message}}</p>
+            <p>{{test.test.age}}</p>
+        </div>
+    </div>
+    <script>
+        function myVue(options) {
+            // 习惯: _ 开头的都是内部的私有属性 可读可写
+            //      $ 开头的只能读
+            this._data = options.data;
+            this._el = options.el;
+
+            // 准备工作( 准备模板 )
+            this._templateDOM = document.querySelector(this._el);
+            this._parent = this._templateDOM.parentNode;
+            // 渲染工作
+            this.render();
+        }
+
+        /** 将模板结合数据 得到 HTML 加载到页面中 */
+        myVue.prototype.render = function () {
+            this.compiler();
+        }
+        /** 编译将模板结合数据 得到真正的 DOM 元素 */
+        myVue.prototype.compiler = function () {
+            let reaHTMLlDOM = this._templateDOM.cloneNode(true);
+            compiler(reaHTMLlDOM, this._data);
+            this.update(reaHTMLlDOM)
+        }
+        /** 将真正的 DOM 元素 加到页面中 */
+        myVue.prototype.update = function (reaHTMLlDOM) {
+            this._parent.replaceChild(reaHTMLlDOM, document.querySelector('#root'));
+        }
+
+        function compiler(template, data) {
+            const reg = /\{\{(.+?)\}\}/g
+            // 获取模板元素下的子元素
+            let nodeList = template.childNodes;
+            // 遍历子元素 判断哪些是元素节点 哪些是文本节点
+            for (let i = 0; i < nodeList.length; i++) {
+                //  1: 代表元素节点
+                //  3: 代表文本节点
+                let type = nodeList[i].nodeType;
+                // 若为元素节点 则继续递归 这里只考虑在元素节点下的情况 没考虑在标签中的情况
+                if (type === 1) {
+                    // 递归调用
+                    compiler(nodeList[i], data)
+                } else if (type === 3) {
+                    // 文本节点 判断里面是否有 {{}} 插值    
+                    let str = nodeList[i].nodeValue; // nodeValue 属性只在文本节点中有效
+                    // 利用正则判读有没有 {{}} 有的话就进行替换 
+                    // replace 函数在正则匹配成功一次就调用一次
+                    // 后面的函数中 第一个参数代表匹配到的内容 {{name}}
+                    //              之后的参数代表正则中的 第 n 组我们在正则中用()分组 name
+                    str = str.replace(reg, (_, g) => {
+                        let path = g.trim();
+                        // 将 data 中的值 取出给变量
+                        let value = getValueByPath(data,path);
+                        // 将变量返回出去 如果不返回 会是 undefined
+                        // 返回的value相当于拿到匹配到的对应的数据返回出去 为下一步填充数据做准备
+                        return value
+                    });
+                    // 注意： str现在和 DOM 元素是没有关系的
+                    // 这里做的就是将 str 对 DOM 上的元素进行填充
+                    nodeList[i].nodeValue = str;
+                }
+            }
+        }
+
+        let app = new myVue({
+            el: '#root',
+            data: {
+                name: 'jyq',
+                message: 'come on',
+                test: {
+                    test: {
+                        name: 'x',
+                        age: 18
+                    }
+                }
+            }
+        })
+
+        // 下面解决另一个问题 就是data中如果嵌套了多层如何去处理
+        // 形如 "xxx.yyy.zzz" 怎么拿到
+        // 使用字符串路径来访问对象的成员
+        function getValueByPath(obj, path) {
+            // 得到的是数组 [xxx,yyy,zzz]
+            let paths = path.split('.');
+            let res = obj;
+            let prop;
+            // 这里使用的是 while 循环 很巧妙的一种方式
+            // 通过每次来弹出首个数组中的元素来控制循环次数
+            while(prop = paths.shift()){
+                res = res[prop];
+            }
+            return res
+        }
+
+        // ------------------ 优化 ----------------------------
+        // Vue中把上面的函数柯里化了 原因是因为 我们的模板其实是不变的 变得是数据
+        // 柯里化之后我们能减少调用函数的次数 能够提高一点点的性能
+        // function createGetValueByPath(path) {
+        //     // 得到的是数组 [xxx,yyy,zzz]
+        //     let paths = path.split('.');
+        //     return function getValueByPath(obj){
+        //         let res = obj;
+        //         let prop;
+        //         // 这里使用的是 while 循环 很巧妙的一种方式
+        //         // 通过每次来弹出首个数组中的元素来控制循环次数
+        //         while(prop = paths.shift()){
+        //             res = res[prop];
+        //         }
+        //         return res
+        //     }
+        // }
+        // let path = createGetValueByPath('test.test')
+        // console.log(path({
+        //         name: 'jyq',
+        //         message: 'come on',
+        //         test: {
+        //             test: {
+        //                 name: 'x',
+        //                 age: 18
+        //             }
+        //         }
+        //     }));
+
+    </script>
+</body>
+
+</html>
