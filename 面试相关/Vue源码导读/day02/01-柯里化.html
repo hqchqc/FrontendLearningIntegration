@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let tag = 'div,p,ul,li,img'.split(',');
+
+        function makeMap(tag) {
+            let set = {};
+            tag.forEach(key => {
+                set[key] = true
+            })
+            return function (tagName) {
+                return !!set[tagName.toLowerCase()]
+            }
+        }
+
+        // 这种方式就要循环 60 次消耗性能
+        // function isHTMLTag(tagName){
+        //     tagName = tagName.toLowerCase();
+        //     if(tag.indexOf(tagName) > -1){
+        //         return true;
+        //     }
+        //     return false;
+        // }
+
+        let isHTMLTag = makeMap(tag);
+
+        // 10 个标签需要判断 那么还有没有循环存在？
+        console.log(isHTMLTag('div'))
+    </script>
+</body>
+
+</html>
