@@ -32,6 +32,11 @@
         myVue.prototype.mount = function () {
             // 需要提供一个 render 方法 用来生成虚拟 DOM
             // 这么写是为了 有一个缓存抽象语法树(虚拟 dom)的函数
+            // 为什么不把 render 写在原型上是因为 Vue 中是可以自定义这个render函数的
+            // 源码中是下面这样 做了一个判断 可以看另一个文件
+            // if(typeof this.render !== 'function'){
+            //     this.render = this.createRender()
+            // }
             this.render = this.createRender()
             // 为了靠近源码 这么写 调用mountComponent函数
             this.mountComponent();

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    let obj = {
+        name: 'hqc',
+        message: 'calling...'
+    }
+
+    Object.defineProperty(obj, 'name', {
+        configurable: true,
+        writable:true,
+        enumerable: true,   // 可枚举
+        value: 'xxx'
+    })
+    
+    let _gender;
+    Object.defineProperty(obj ,'gender' ,{
+        configurable: true,
+        // writable: true,  //使用get 和 set 的时候不能出现这个属性
+        enumerable: true,
+        get(){  // 如果使用 obj.name 来访问数据就会调用get方法
+            return _gender
+        },
+        set(newVal){
+            _gender = newVal
+        }
+    })
+
+    //问题：这个_gender被暴露在全局作用域 ？ 如何解决
+
+    // 在 Vue 当中 使用了 defineReactive( target,key,value,enumerable )
+    </script>
+</body>
+</html>

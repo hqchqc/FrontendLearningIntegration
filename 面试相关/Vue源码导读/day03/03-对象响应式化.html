@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let data = {
+            name: 'hqc',
+            age: 20,
+            course: [
+                {name: '语文'},
+                {name: '数学'},
+                {name: '英语'},
+            ]
+        }; // 除了递归还可以使用队列 (深度优先转换为广度优先)
+
+        // 简化后的版本
+        function defineReactive(target, key, value, enumerable) {
+            if(typeof value === 'object' && !Array.isArray(value) && value !== null){
+                // 是非数组的引用类型
+                reactify(value);
+            }
+            // 函数内部就是一个局部作用域 这个 value 就只是在函数内使用的变量(闭包)
+            Object.defineProperty(target, key, {
+                configurable: true,
+                enumerable,
+                get() {
+                    return value
+                },
+                set(newVal) {
+                    value = newVal;
+                }
+            })
+        }
+
+        // 针对data中数据有好多层如何处理
+        function reactify(data){
+            // 拿到一个data对象的key值 是一个数组
+            let keys = Object.keys(data);
+            // 遍历这个对象
+            for(let i=0; i<keys.length; i++){
+                // 如果是一个数组类型
+                if(Array.isArray(data[keys[i]])){
+                    // 对数组的每一项添加响应式
+                    let temp = data[keys[i]];
+                    for(let j=0; j<temp.length; j++){
+                        reactify(temp[j]);
+                    }
+                }else{
+                    // 如果是一个引用类型或是基本类型
+                    defineReactive(data,keys[i],data[keys[i]],true)
+                }
+            }
+        }
+
+        reactify(data);
+    </script>
+</body>
+</html>

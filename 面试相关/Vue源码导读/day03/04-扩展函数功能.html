@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 这个就是在函数原有的基础上增加 额外的操作： 函数的拦截
+        function fn(){
+            console.log('这是最开始的函数具有的功能！');
+        }
+        // 1. 使用一个临时函数名存储函数
+        let newFn = fn;
+        // 2. 重新定义原来的功能
+        fn = function(){
+            // 3. 定义扩展的功能
+            console.log('这是新加的功能');
+            // 4. 调用临时的那个函数
+            newFn()
+        }
+        fn()
+    </script>
+</body>
+</html>
