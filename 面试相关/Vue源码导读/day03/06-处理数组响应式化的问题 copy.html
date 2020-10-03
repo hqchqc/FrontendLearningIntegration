@@ -17,6 +17,31 @@
             ]
         }; // 除了递归还可以使用队列 (深度优先转换为广度优先)
 
+        let ARR_METHOD = [
+            'push',
+            'pop',
+            'shift',
+            'unshift',
+            'splice',
+            'sort',
+            'reverse'
+        ]
+
+        let array_methods = Object.create(Array.prototype);
+        ARR_METHOD.forEach(method => {
+            array_methods[method] = function(){
+                console.log('调用的是拦截的 ' + method);
+
+                // 将数据进行响应式化
+                for(let i=0; i<arguments.length; i++){
+                    reactify(arguments[i]);
+                }
+
+                let res = Array.prototype[method].apply(this,arguments);
+                return res;
+            }
+        })
+
         // 简化后的版本
         function defineReactive(target, key, value, enumerable) {
             if(typeof value === 'object' && !Array.isArray(value) && value !== null){
@@ -31,6 +56,9 @@
                     return value
                 },
                 set(newVal) {
+                    // 对于 数组和基本数据类型而言 是没有问题的
+                    // 但是对于引用数据类型直接给他赋值是有问题的 不会成为响应式
+                    reactify(newVal);
                     value = newVal;
                 }
             })
@@ -46,6 +74,9 @@
                 if(Array.isArray(data[keys[i]])){
                     // 对数组的每一项添加响应式
                     let temp = data[keys[i]];
+
+                    temp.__proto__ = array_methods; // 数组就响应式了
+
                     for(let j=0; j<temp.length; j++){
                         reactify(temp[j]);
                     }
