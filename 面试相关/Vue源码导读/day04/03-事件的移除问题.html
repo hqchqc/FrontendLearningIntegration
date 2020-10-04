@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">点击</button>
+    <script>
+        /** 因为 js 是解释性的脚本语言 所以下面这种方式是不能被正确移除的
+         *  因为 在执行移除那行代码的时候 仅仅是把内存中的那个函数移除了，
+         *  原来这个还是没有被移除
+        */
+        let btn = document.querySelector('#btn');
+        // btn.addEventListener('click',function(){
+        //     console.log('点击了');
+        // })
+        // btn.removeEventListener('click',function(){
+        //     console.log('这样是不能被移除的哦');
+        // })
+
+        /** 应该改为这样 */
+        function handle(){
+            console.log('被移除了');
+        }
+        btn.addEventListener('click',handle);
+        btn.removeEventListener('click',handle);
+    </script>
+</body>
+</html>
