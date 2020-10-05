@@ -250,8 +250,12 @@
                     // 对于 数组和基本数据类型而言 是没有问题的
                     // 但是对于引用数据类型直接给他赋值是有问题的 不会成为响应式
 
-                    reactify(newVal);
-                    value = newVal;
+                    if(typeof newVal === 'object' && newVal != null){
+                        value = reactify(newVal);   // 由于这个方法现在暂时只是过渡( 不安全 )
+                    }else{
+                        value = newVal;
+                    }
+                
 
                     // 模板刷新 (这里现在是假的 只是演示一下)
                     // Vue实例 ？？？
@@ -310,14 +314,14 @@
         }
 
         myVue.prototype.initData = function () {
-            // 遍历 this._data 的成员 将属性转为响应式(已经写了前一节课)
-            // 将 直接属性 代理到实例上
+            // 1. 遍历 this._data 的成员 将属性转为响应式(已经写了前一节课)
+            // 2. 将 直接属性 代理到实例上
             let keys = Object.keys(this._data);
 
             // 响应式化
             for (let i = 0; i < keys.length; i++) {
                 // 这里将对象 this._data[ keys[ i ] ] 变成响应式的
-                reactify(this._data,keys[i])
+                reactify(this._data,this)
             }
 
             // 代理
@@ -359,7 +363,8 @@
                 name: 'hqc',
                 age: 18,
                 message: 'calling you...',
-                data: [{
+                datas: [
+                    {
                         info: '好帅啊'
                     },
                     {

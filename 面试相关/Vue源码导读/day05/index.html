@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root">
+        <div>
+            <div>hello1</div>
+            <div class="h" title="1" id="1">hello2</div>
+            <div>hello3</div>
+            <ul>
+                <li>{{name}}</li>
+                <li>{{age}}</li>
+                <li>{{message}}</li>
+                <li>{{info.0.info}}</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="./src/watcher.js"></script>
+    <script src="./src/vnode.js"></script>
+    <script src="./src/compiler.js"></script>
+    <script src="./src/myVue.js"></script>
+    <script src="./src/initrender.js"></script>
+    <script src="./src/initdata.js"></script>
+
+    <script>
+        // rollup
+        let app = new myVue({
+            el: '#root',
+            data: {
+                name: 'hqc',
+                age: 18,
+                message: 'calling you...',
+                info: [{
+                        info: '好帅啊'
+                    },
+                    {
+                        info: '好美呐'
+                    }
+                ]
+            },
+
+            computed: {
+                // 计算属性也是响应式的( watcher )
+            },
+
+            watch: {
+                // 监听什么属性，这个属性是支持路径语法
+                // 也是使用watcher 实现
+            },
+        })
+    </script>
+
+</body>
+</html>

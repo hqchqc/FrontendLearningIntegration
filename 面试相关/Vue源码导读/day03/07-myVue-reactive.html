@@ -246,8 +246,12 @@
                     // 对于 数组和基本数据类型而言 是没有问题的
                     // 但是对于引用数据类型直接给他赋值是有问题的 不会成为响应式
 
-                    reactify(newVal);
-                    value = newVal;
+                    // 临时处理
+                    if(typeof newVal === 'object' && newVal != null){
+                        value = reactify(newVal);   // 由于这个方法现在暂时只是过渡( 不安全 )
+                    }else{
+                        value = newVal
+                    }
 
                     // 模板刷新 (这里现在是假的 只是演示一下)
                     // Vue实例 ？？？
@@ -266,7 +270,6 @@
                 if(Array.isArray(data[keys[i]])){
                     // 对数组的每一项添加响应式
                     let temp = data[keys[i]];
-
                     temp.__proto__ = array_methods; // 数组就响应式了
 
                     for(let j=0; j<temp.length; j++){
