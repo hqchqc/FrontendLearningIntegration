@@ -1,5 +1,7 @@
 /* @flow */
 
+// 这里都是工具方法 在 代码 中可能随处可用 这里就是了解一下
+
 export const emptyObject = Object.freeze({})
 
 // These helpers produce better VM code in JS engines due to their
@@ -102,6 +104,10 @@ export function toNumber (val: string): number | string {
 /**
  * Make a map and return a function for checking if a key
  * is in that map.
+ * 
+ * 
+ * makeMap 生成一个带有缓存的函数，用于判断 数据是否是缓存中的数据，
+ * 代表 判断字符串(标签名) 是否为内置的 HTML 标签
  */
 export function makeMap (
   str: string,
@@ -149,6 +155,8 @@ export function hasOwn (obj: Object | Array<*>, key: string): boolean {
 
 /**
  * Create a cached version of a pure function.
+ * 
+ * 面试经常面到的方法： 生成带有缓存的函数(闭包的应用)
  */
 export function cached<F: Function> (fn: F): F {
   const cache = Object.create(null)
@@ -180,6 +188,17 @@ const hyphenateRE = /\B([A-Z])/g
 export const hyphenate = cached((str: string): string => {
   return str.replace(hyphenateRE, '-$1').toLowerCase()
 })
+
+// vue 运行在浏览器中 所以需要考虑性能
+// 每次数据的更新 -> 虚拟 DOM 的生成( 模板解析的行为 ) -> 因此将经常使用的字符串与算法进行缓存
+// 在垃圾回收的原则中有一个统计现象： 使用的越多的数据 一般都会经常使用
+// 1. 每次创建一个数据 我们就会考虑是否要将其回收
+// 2. 在数据达到一定限额的时候 就会考虑将数据回收( 回收不是实时的 )
+//    - 如果每次都有判断对象是否需要回收 那么就需要遍历
+//    - 将对象进行划分 统计 往往一个数据使用完以后就不需要使用了
+//    - 一个对象如果在一次回收之后还保留下来，统计的结果是这个对象会比较持久的在内存中驻留
+// 在模板中常常会使用“指令” 在 vue 中是 xxx-xx-xx 的形式出现的属性
+// 每次数据的更新都可能会带来指令的解析 所以解析就是字符串的处理 一般会消耗一定的性能
 
 /**
  * Simple bind polyfill for environments that do not support it,
@@ -278,6 +297,19 @@ export function genStaticKeys (modules: Array<ModuleOptions>): string {
   }, []).join(',')
 }
 
+
+// 面试中可能会遇到 思想很重要 
+// diff算法也用到了
+// 比较两个对象是否是相等的两个对象
+// 1. js 中 对象是无法使用 == 来比较的，比的是地址
+// 2. 我们一般会定义如果对象的各个属性值都相等 那么对象就是相等的对象 例如： {} 就与 {} 相等
+// 算法描述
+// 1. 假定对象 A 和 B
+// 2. 遍历 A 中的成员, 判断是否每一个 A 中的成员都在 B 中 并且与 B 中的对应成员相等
+// 3. 再遍历 B 中 的成员 判断是否每一个 B 中的成员都在 A 中 并且与 A 中的对应成员相等
+// 4. 如果成员是引用类型 递归
+
+// 抽象一下，就是判断两个集合是否相等
 /**
  * Check if two values are loosely equal - that is,
  * if they are plain objects, do they have the same shape?
@@ -329,11 +361,13 @@ export function looseIndexOf (arr: Array<mixed>, val: mixed): number {
   return -1
 }
 
+// 让一个事件( 让一个函数 )只允许调用一次
+// 在 vue 中有函数方法 (on off等 once),once方法就是这个思路
 /**
  * Ensure a function is called only once.
  */
 export function once (fn: Function): Function {
-  let called = false
+  let called = false  // 利用闭包 是否调用过
   return function () {
     if (!called) {
       called = true

@@ -36,7 +36,15 @@ class Dep {
 Dep.target = null; // 这就是全局的 Watcher
 // --------------- 改良 ------------------
 
+let targetStack = []; // 栈结构
+
 /** 将当前操作的 watcher 存储到 全局 watcher 中 参数 target 就是当前 watcher */
 function pushTarget(target) {
-  
+  targetStack.unshift(Dep.target);
+  Dep.target = target;
+}
+
+/** 将当前 watcher 踢出 */
+function popTarget(){
+  Dep.target = targetStack.shift();
 }

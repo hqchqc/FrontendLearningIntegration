@@ -48,14 +48,22 @@ export function proxy (target: Object, sourceKey: string, key: string) {
 export function initState (vm: Component) {
   vm._watchers = []
   const opts = vm.$options
+  // 处理 options.props 的成员 一般定义组件的时候  用于定义对外的成员 初学少用 其处理逻辑与 data 类似
   if (opts.props) initProps(vm, opts.props)
+  // 处理 options.methods 的成员
   if (opts.methods) initMethods(vm, opts.methods)
+
+  // 处理 options.data ( 响应式化 )
   if (opts.data) {
     initData(vm)
   } else {
     observe(vm._data = {}, true /* asRootData */)
   }
+
+  // 处理 options.computed 计算属性
   if (opts.computed) initComputed(vm, opts.computed)
+
+  // 处理 options.watch
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
   }
@@ -103,7 +111,7 @@ function initProps (vm: Component, propsOptions: Object) {
     // during Vue.extend(). We only need to proxy props defined at
     // instantiation here.
     if (!(key in vm)) {
-      proxy(vm, `_props`, key)
+      proxy(vm, `_props`, key)  // 将 _props 上的成员映射到 vue 实例上
     }
   }
   toggleObserving(true)
@@ -153,7 +161,8 @@ function initData (vm: Component) {
 
 export function getData (data: Function, vm: Component): any {
   // #7573 disable dep collection when invoking data getters
-  pushTarget()
+  pushTarget()  // 由于此时是 Vue 的初始化 还没有进行模板渲染 所以不需要进行依赖收集 在 pushTarget的时候传入空
+                // 就将全局的 watcher 设置为 undefined 依赖收集的时候有一个判断是 Dep.target存在的时候才收集
   try {
     return data.call(vm, vm)
   } catch (e) {
@@ -283,7 +292,7 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
-    vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
+    vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm) // 绑定函数上下文
   }
 }
 
