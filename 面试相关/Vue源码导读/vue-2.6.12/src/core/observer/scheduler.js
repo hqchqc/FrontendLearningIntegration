@@ -6,7 +6,8 @@ import { callHook, activateChildComponent } from '../instance/lifecycle'
 
 import {
   warn,
-  nextTick,
+  nextTick, // 不同版本号 实现是不一样的 process.nextTick 但是浏览器不支持
+            // 降级后 使用 setTimeout来模拟
   devtools,
   inBrowser,
   isIE
@@ -14,16 +15,23 @@ import {
 
 export const MAX_UPDATE_COUNT = 100
 
+// watcher 队列 简单理解为事件队列
 const queue: Array<Watcher> = []
+
 const activatedChildren: Array<Component> = []
 let has: { [key: number]: ?true } = {}
 let circular: { [key: number]: number } = {}
+
+/** 异步的触发没有开始 类比 setTimeout还没有执行 */
 let waiting = false
+/** 开始渲染 清空队列 执行队列中的 run 方法 */
 let flushing = false
 let index = 0
 
 /**
  * Reset the scheduler's state.
+ * 
+ * 清空队列
  */
 function resetSchedulerState () {
   index = queue.length = activatedChildren.length = 0
@@ -184,7 +192,8 @@ export function queueWatcher (watcher: Watcher) {
         flushSchedulerQueue()
         return
       }
-      nextTick(flushSchedulerQueue)
+      nextTick(flushSchedulerQueue) // 让任务队列中的watcher在下一次事件循环中触发
+                                    // 不阻塞当前的处理逻辑
     }
   }
 }

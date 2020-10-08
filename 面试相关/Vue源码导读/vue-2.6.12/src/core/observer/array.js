@@ -8,6 +8,8 @@ import { def } from '../util/index'
 const arrayProto = Array.prototype
 export const arrayMethods = Object.create(arrayProto)
 
+// methodsToPatch 就是继承自 Array.prototype 的数组
+
 const methodsToPatch = [
   'push',
   'pop',

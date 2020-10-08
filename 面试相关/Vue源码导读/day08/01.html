@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 数组去重
+        var arr = [1,2,2,2,3,3,3,4,4,5];
+
+        let _set = {}
+        let _newarr = [];
+        arr.forEach(v=>{
+            _set[v] || (_set[v] = true,_newarr.push(v))
+        })
+        console.log(_newarr);
+
+        // 判同的化就是那个 loseequal
+
+        // 不适用 JSON.stringify 实现将对象转换为 JSON格式的字符串
+    </script>
+</body>
+</html>

@@ -697,6 +697,11 @@ export function createPatchFunction (backend) {
     }
   }
 
+  // 二次提交得逻辑
+  // 每次数据更新得时候 -> 新的虚拟 DOM -> diff旧的虚拟DOM(真实的DOM) -> 更新的虚拟DOM -> 同步真DOM
+  // 分而治之，每一个虚拟DOM都和页面中的DOM一一对应
+  //  我们只需要将 VNode 与 DOMNode 建立一个更新的关系
+  //  递归触发每一个虚拟DOM的update方法 来更新对应真的DOM的数据
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)

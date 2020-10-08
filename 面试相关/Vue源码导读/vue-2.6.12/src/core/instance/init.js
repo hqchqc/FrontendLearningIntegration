@@ -59,7 +59,7 @@ export function initMixin (Vue: Class<Component>) {
     initEvents(vm)              // 初始化事件的容器
     initRender(vm)              // 初始化创建元素的方法
     callHook(vm, 'beforeCreate')  // 调用生命周期函数
-    initInjections(vm) // resolve injections before data/props  // 初始化注入器 略
+    initInjections(vm) // resolve injections before data/props  // 初始化注入器 略  和其他库结合使用 Angular中也有
     initState(vm)             // 重点 初始化状态数据(data,property等)
     initProvide(vm) // resolve provide after data/props //略
     callHook(vm, 'created') // 生命周期函数的调用

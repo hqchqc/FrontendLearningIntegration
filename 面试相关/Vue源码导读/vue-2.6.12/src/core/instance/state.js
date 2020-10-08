@@ -119,8 +119,10 @@ function initProps (vm: Component, propsOptions: Object) {
 
 function initData (vm: Component) {
   let data = vm.$options.data
+
+  /** 将 data 挂载到 实例的 _data上 */
   data = vm._data = typeof data === 'function'
-    ? getData(data, vm)
+    ? getData(data, vm) // 将函数调用一下，获得函数的返回值
     : data || {}
   if (!isPlainObject(data)) {
     data = {}
@@ -137,6 +139,8 @@ function initData (vm: Component) {
   let i = keys.length
   while (i--) {
     const key = keys[i]
+
+    /** 这里的判断只是为了避免 props data method等数据发生冲突 同名的问题 */
     if (process.env.NODE_ENV !== 'production') {
       if (methods && hasOwn(methods, key)) {
         warn(
@@ -247,6 +251,7 @@ export function defineComputed (
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
+// 浏览器中触发得情况 里面会对数据的访问关联一个 watcher
 function createComputedGetter (key) {
   return function computedGetter () {
     const watcher = this._computedWatchers && this._computedWatchers[key]
@@ -262,6 +267,7 @@ function createComputedGetter (key) {
   }
 }
 
+// 服务端渲染的时候触发 里面直接计算不会涉及到 watcher 处理
 function createGetterInvoker(fn) {
   return function computedGetter () {
     return fn.call(this, this)

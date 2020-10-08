@@ -34,6 +34,11 @@ export default class Dep {
     }
   }
 
+  /**
+   * 每一个 属性都会包含一个 dep 实例
+   * 这个 dep 实例会记录下 参与计算或渲染的 watcher
+   */
+
   notify () {
     // stabilize the subscriber list first
     const subs = this.subs.slice()

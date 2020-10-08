@@ -25,22 +25,29 @@ let uid = 0
  */
 export default class Watcher {
   vm: Component;
-  expression: string;
-  cb: Function;
+  expression: string; // 关联表达式 或 渲染方法体
+  cb: Function; // 在定义 Vue 构造函数的时候 传入的 watch
   id: number;
   deep: boolean;
   user: boolean;
-  lazy: boolean;
+  lazy: boolean;  // 计算属性 和watch来控制不要让watcher 立即执行
   sync: boolean;
   dirty: boolean;
   active: boolean;
-  deps: Array<Dep>;
-  newDeps: Array<Dep>;
+
+                  //Vue中使用了二次跟新的概念
+                  // 每次在数据渲染或计算的时候 就会访问响应式的数据 就会进行依赖收集
+                  // 就将关联的 watcher 与 dep 相关联
+                  // 在数据发生变化的时候，根据 dep 找到关联的 watcher 一次调用update
+                  // 执行完成后会清空 watcher
+  deps: Array<Dep>; 
   depIds: SimpleSet;
+
+  newDeps: Array<Dep>;
   newDepIds: SimpleSet;
-  before: ?Function;
-  getter: Function;
-  value: any;
+
+  before: ?Function;  // watcher 出发之前的类似于生命周期函数
+    getter: Function;// 就是 渲染函数(模板或组件的渲染)或计算函数 (watch)
 
   constructor (
     vm: Component,
@@ -90,6 +97,7 @@ export default class Watcher {
         )
       }
     }
+    // 如果是 lazy 就什么也不做 否则就立即调用
     this.value = this.lazy
       ? undefined
       : this.get()
@@ -143,7 +151,7 @@ export default class Watcher {
     let i = this.deps.length
     while (i--) {
       const dep = this.deps[i]
-      if (!this.newDepIds.has(dep.id)) {
+      if (!this.newDepIds.has(dep.id)) {  // 在二次提交中 归档就是让旧的dep和新的 newDeps一致
         dep.removeSub(this)
       }
     }
@@ -152,7 +160,7 @@ export default class Watcher {
     this.newDepIds = tmp
     this.newDepIds.clear()
     tmp = this.deps
-    this.deps = this.newDeps
+    this.deps = this.newDeps  // 同步
     this.newDeps = tmp
     this.newDeps.length = 0
   }
@@ -163,22 +171,25 @@ export default class Watcher {
    */
   update () {
     /* istanbul ignore else */
-    if (this.lazy) {
+    if (this.lazy) {  // 主要针对计算属性 一般用于求值计算
       this.dirty = true
-    } else if (this.sync) {
+    } else if (this.sync) { // 同步 主要用于 SSR 同步就表示立即计算
       this.run()
     } else {
-      queueWatcher(this)
+      queueWatcher(this)  // 一般浏览器中的异步运行 本质上就是异步执行 run
+                          // 类比 setTimeout(()=>{this.run()},0)
     }
   }
 
   /**
    * Scheduler job interface.
    * Will be called by the scheduler.
+   * 
+   * 调用get求值
    */
   run () {
     if (this.active) {
-      const value = this.get()
+      const value = this.get()  // 要么渲染 要么求值
       if (
         value !== this.value ||
         // Deep watchers and watchers on Object/Arrays should fire even
