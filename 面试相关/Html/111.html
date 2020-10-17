@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <ul id="small">
+            <li></li>   
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <script>
+        var small = document.getElementById('small');
+        small.addEventListener('click',e=>{
+            console.log(e.target.nodeName.toLocaleLowerCase());
+            if(e.target.toLocalLowerCase === 'li'){
+                console.log(target.innerHtml);
+            }
+        })
+    </script>
+</body>
+</html>
