@@ -10,5 +10,17 @@
     this.right = null;
 } */
 function IsBalanced_Solution(pRoot) {
-    
+    if(!pRoot) return true
+
+    if(Math.abs(getLength(pRoot.left) - getLength(pRoot.right)) > 1){
+        return false
+    }else{
+        return IsBalanced_Solution(pRoot.left) && IsBalanced_Solution(pRoot.right)
+    }
+}
+
+function getLength(root){
+    if(!root) return 0
+
+    return Math.max(getLength(root.left) , getLength(root.right)) + 1;
 }
