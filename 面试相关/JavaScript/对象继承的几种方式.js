@@ -25,6 +25,7 @@ Sub.prototype.constructor = Sub
  * 借用构造函数继承(假继承)
  * 所有的子类都会拷贝一份父类型 占用内存大
  * 主要是为了属性
+ * 不能继承父类原型上的方法
  */
 function Father(name,age){
     this.name = name;

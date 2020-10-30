@@ -126,7 +126,7 @@ Promise.all = function (promises) {
             Promise.resolve(promises[i]).then(data => {
                 handleDate(data, i);
             }).catch(err => {
-                reject(err)
+                reject(err);
             })
         }
     })
