@@ -5,18 +5,15 @@
     this.next = null;
 }*/
 function EntryNodeOfLoop(pHead) {
-    if (!pHead || !pHead.next || !pHead.next.next) return null
-    let slow = pHead.next,
-        fast = pHead.next.next
-    while (slow != fast) {
-        slow = slow.next
-        fast = fast.next.next
+    if (!pHead) return null;
+    let map = [];
+
+    while (pHead) {
+        if (map.indexOf(pHead) !== -1) {
+            return pHead
+        } else {
+            map.push(pHead);
+            pHead = pHead.next;
+        }
     }
-    let p = pHead,
-        q = fast
-    while (p != q) {
-        p = p.next
-        q = q.next
-    }
-    return p
 }
