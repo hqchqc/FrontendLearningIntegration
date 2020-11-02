@@ -174,3 +174,4 @@ let arr = [10, 2, 4, 356, 15, 3, 45];
 quickSort(arr)
 
 console.log(arr);
+

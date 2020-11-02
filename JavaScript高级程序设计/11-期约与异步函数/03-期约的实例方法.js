@@ -256,12 +256,12 @@
  *      - 在期约的执行函数或处理程序中抛出错误会导致拒绝，对应的错误对象会成为拒绝的理由
  */
 
- let p1 = new Promise((resolve,reject) => reject(Error('foo')));
- let p2 = new Promise((resolve,reject) => { throw Error('foo')});
- let p3 = Promise.resolve().then(()=>{throw Error('foo')})
- let p4 = Promise.reject(Error('foo'));
+//  let p1 = new Promise((resolve,reject) => reject(Error('foo')));
+//  let p2 = new Promise((resolve,reject) => { throw Error('foo')});
+//  let p3 = Promise.resolve().then(()=>{throw Error('foo')})
+//  let p4 = Promise.reject(Error('foo'));
 
- setTimeout(console.log,0,p1);
- setTimeout(console.log,0,p2);
- setTimeout(console.log,0,p3);
- setTimeout(console.log,0,p4);
+//  setTimeout(console.log,0,p1);
+//  setTimeout(console.log,0,p2);
+//  setTimeout(console.log,0,p3);
+//  setTimeout(console.log,0,p4);
