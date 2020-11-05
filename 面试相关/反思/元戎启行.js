@@ -304,3 +304,71 @@ Child.prototype.run = function(){
 let child = new Child('xx',19);
 console.log(child);
 child.go()
+
+function Parent(){
+    this.name = 'x'
+}
+function Child(){
+    this.name = 'z',
+    this.age = 10
+}
+Child.prototype = new Parent();
+Child.prototype.constructor = Child;
+
+function Parent(name){
+    this.name = name
+}
+function Child(name,age){
+    Parent.call(this,name)
+    this.age = age;
+}
+function Parent(name){
+    this.name = name;
+}
+function Child(age,name){
+    Parent.call(this,name)
+    this.age = age
+}
+Child.prototype = new Parent();
+Child.prototype.constructor = Child;
+
+let obj = {
+    name: 'xxx'
+}
+function content(obj){
+    function Fn(){};
+    Fn.prototype = obj;
+    return new Fn();
+}
+
+let obj = {
+    name:'xx'
+}
+function content(obj){
+    function Fn(){};
+    Fn.prototype = obj;
+    return new Fn()
+}
+
+function create(obj){
+    let clone = content(obj);
+    clone.go = function(){
+        console.log('ss');
+    }
+    return clone;
+}
+
+function Parent(name){
+    this.name = name;
+}
+function Child(name,age){
+    Parent.call(this,name)
+    this.age = age;
+}
+
+function Content(obj){
+    function Fn(){};
+    Fn.prototype = obj;
+    return new Fn()
+}
+Child.prototype = Content(Parent.prototype);
