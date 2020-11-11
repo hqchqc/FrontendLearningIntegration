@@ -37,13 +37,53 @@
 // myObject.a = 3;
 // console.log(myObject);
 
-var anotherObject = {
-    a: 3
-}
-var myObject = Object.create(anotherObject);
-console.log(anotherObject.a , myObject.a);  // 3 3
-console.log(myObject.hasOwnProperty("a"),anotherObject.hasOwnProperty("a"));    // false true
+// var anotherObject = {
+//     a: 3
+// }
+// var myObject = Object.create(anotherObject);
+// console.log(anotherObject.a , myObject.a);  // 3 3
+// console.log(myObject.hasOwnProperty("a"),anotherObject.hasOwnProperty("a"));    // false true
 
-// 隐式屏蔽
-myObject.a++
-console.log(anotherObject.a , myObject.a);  // 3 4
+// // 隐式屏蔽
+// myObject.a++
+// console.log(anotherObject.a , myObject.a);  // 3 4
+
+// function Parent(name){
+//     this.name = name
+// }
+// Parent.prototype.getName = function(){
+//     console.log(this.name);
+// }
+// function Child(name,age){
+//     Parent.call(this,name);
+//     this.age = age;
+// }
+
+// // Child.prototype = new Parent();
+// Child.prototype = Object.create(Parent.prototype);
+// // Child.prototype.constructor = Child
+// // Object.setPrototypeOf(Child.prototype,Parent.prototype);
+
+// Child.prototype.getAge = function(){
+//     console.log(this.age);
+// }
+
+// let child = new Child('hello',20);
+// child.getAge();
+// child.getName();
+// console.log(child);
+
+var anotherObject = {
+    cool: function(){
+        console.log('cool!');
+    }
+}
+
+var myObject = Object.create(anotherObject);
+
+myObject.doCool = function(){
+    this.cool();
+    console.log(this);
+}
+
+myObject.doCool()
