@@ -10,48 +10,40 @@
    因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
  */
 
-function hasPath(matrix, rows, cols, path)
-{
-    let w = rows, h = cols;
-    let len = path.length;
-    let mat = matrix;
-    
-    for(let i = 0; i < rows; i++){
-        for(let j = 0; j < cols; j++){
-            if(dfs(i,j,0,path)){
-                return true
+function hasPath(matrix, rows, cols, path) {
+    let flag = new Array(matrix.length).fill(null);
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (dfs(matrix, rows, cols, i, j, flag, path, 0)) {
+                return true;
             }
         }
     }
-    return false;
+
+    return false
 }
 
-function dfs(i,j,pos,path){
-    let mat = [],
-        h = 0,
-        w = 0,
-        len = 0,
-        dir = [-1,0,1,0,-1]
-    // 1. 检查下标是否满足条件
-    if(i < 0 || i >= h || j < 0 || j >= w){
-        return false
-    }
-    // 2. 检查是否被访问过，或者是否满足当前匹配条件
-    let ch = mat[i * w + j];
-    if(ch === '#' || ch !== path[pos]){
+function dfs(matrix, rows, cols, i, j, flag, str, k) {
+    // 1. 获取对应一维数组的下标
+    let index = i * cols + j;
+    // 2. 临界值判断
+    if (i < 0 || i >= rows || j < 0 || j >= cols || matrix[index] !== str[k] || flag[index] === true) {
         return false;
     }
-    if(pos + 1 === len){
-        return true;
+    // 3. 如果走到最后了 返回true
+    if (k === str.length - 1 ) {
+        return true
     }
-    // 3. 检查是否满足返回结果条件
-    mat[i * w + j] = '#';
-    for(let k = 0; k < 4; k++){
-        if(dfs(i + dir[k], j + dir[k+1], pos + 1, path)){
-            return true
-        }
+    // 4. 走过啦 标为 true
+    flag[index] = true;
+    // 4. 回溯 
+    if (dfs(matrix, rows, cols, i - 1, j, flag, str, k + 1) ||
+        dfs(matrix, rows, cols, i + 1, j, flag, str, k + 1) ||
+        dfs(matrix, rows, cols, i, j - 1, flag, str, k + 1) ||
+        dfs(matrix, rows, cols, i, j + 1, flag, str, k + 1)) {
+        return true
     }
-    // 4. 都没有返回 说明应该进行下一步递归
-    mat[i * w + j] = ch;
+    flag[index] = false;
     return false
 }
