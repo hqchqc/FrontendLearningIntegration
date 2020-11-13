@@ -9,5 +9,21 @@
  */
 
 function cutRope(number) {
-    // write code here
+   let res = [0,1,2,3];
+   if(number < 4){
+       return number - 1;
+   }
+   if(res[number]) return res[number];
+   let max = 0;
+   for(let i = 4; i <= number; i++){
+       max = 0;
+       for(let j = 1; j <= i / 2; j++){
+           let p = res[i - j] * res[j];
+           max = max < p ? p : max
+       }
+       res[i] = max;
+   }
+   return res[number]
 }
+console.log(cutRope(8)
+);
