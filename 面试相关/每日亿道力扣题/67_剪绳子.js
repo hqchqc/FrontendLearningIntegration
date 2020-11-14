@@ -9,21 +9,13 @@
  */
 
 function cutRope(number) {
-   let res = [0,1,2,3];
-   if(number < 4){
-       return number - 1;
-   }
-   if(res[number]) return res[number];
-   let max = 0;
-   for(let i = 4; i <= number; i++){
-       max = 0;
-       for(let j = 1; j <= i / 2; j++){
-           let p = res[i - j] * res[j];
-           max = max < p ? p : max
+   let dp = [0,1,1,2,3,4,9];
+   if(number <= 6){
+       return dp[number]
+   }else{
+       for(let i = 7; i <= number; i++){
+           dp[i] = 3 * dp[i - 3];
        }
-       res[i] = max;
+       return dp[number]
    }
-   return res[number]
 }
-console.log(cutRope(8)
-);
