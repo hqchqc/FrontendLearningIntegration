@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>Header</div>
+
+    <div id="app">app</div>
+
+    <div>footer</div>
+    <!-- 添加 React 依赖 Vue只要引入一个文件 -->
+    <!-- crossorigin 添加了此属性后 如果引入的脚本有问题会在 console 控制台中体现出来 -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- 开始开发 -->
+    <!-- 注意事项： 使用jsx,并且希望script中的jsx的代码被解析，必须在script标签中添加一个属性 -->
+    <script type="text/babel">
+        // 源码中有导出这个对象 同时导出了它的其它方法
+        // 本质从 React-dom 里的index.js中 导出了 *
+        // React-dom -> src -> client -> ReactDOM里 export了一个对象 {}
+        //  ReactDOM 就是这个对象 有一个 render函数
+        // ReactDOM.render(渲染的内容,挂载的对象)
+        // <h2></h2> jsx代码
+        let message = "Hello World";
+        ReactDOM.render(<h2>{message}</h2>,document.getElementById('app'))
+    </script>
+</body>
+</html>
