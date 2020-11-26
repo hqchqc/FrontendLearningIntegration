@@ -28,15 +28,20 @@
         function btnClick(){
             message = "Hello React";
             console.log(message);
+            render();
         }
         // <h2></h2> jsx代码
-        ReactDOM.render(
-            <div>
-                <h2>{message}</h2>
-                <button onClick={btnClick}>改变文本</button>
-            </div>,
-            document.getElementById('app')
-        )
+        function render(){
+            ReactDOM.render(
+                <div>
+                    <h2>{message}</h2>
+                    <button onClick={btnClick}>改变文本</button>
+                </div>,
+                document.getElementById('app')
+            )
+        }
+
+        render();   
     </script>
 </body>
 </html>
