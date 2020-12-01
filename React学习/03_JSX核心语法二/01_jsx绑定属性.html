@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="../react/react.development.js"></script>
+  <script src="../react/react-dom.development.js"></script>
+  <script src="../react/babel.min.js"></script>
+
+  <script type="text/babel">
+    function formatPic(url,size){
+      return url + '?param=' + size + 'y' + size
+    }
+
+    class App extends React.Component{
+      constructor(){
+        super();
+        this.state = {
+          title: '每一个元素都有 title 属性',
+          link: 'http://www.baidu.com',
+          imgUrl: 'http://p4.music.126.net/teVK0N534C2mSYoaLr0uqw==/109951165397709994.jpg',
+          active: true
+        }
+      }
+
+      render(){
+        const {title,link,imgUrl,active} = this.state
+        return (
+          <div>
+            {/* 1. 绑定普通属性 */}
+            <h2 title={title}>每一个元素都有title属性</h2>
+            <a href={link} target="_blank" title={title}>百度一下</a>
+            <img src={imgUrl + '?param=200y200'} alt="" />
+            <img src={formatPic(imgUrl,250)} alt="" />
+
+            {/* 2. 绑定class属性 */}
+            <div class="box">我是一个div</div>
+            <div className="box2">绑定class 要使用className</div>
+            <div className={"box2" + (active ? " active" : "")}>active为true时增加一个样式</div>
+            <label htmlFor="">由于for属性名和JavaScript中的关键字重名，所以要写成htmlFor</label>
+
+            {/* 3. 绑定内联样式 */}
+            <div style={{color:"red",fontSize:"30px"}}>绑定内联样式</div>
+          </div>
+        )
+      }
+    }
+    ReactDOM.render(<App/>,document.getElementById('app'));
+  </script>
+</body>
+</html>
